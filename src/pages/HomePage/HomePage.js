@@ -1,28 +1,13 @@
 import styled from "styled-components"
 
 export default function HomePage(props) {
-    console.log(props.listaFilmes)
+    console.log("props.listaFilmes" ,props.listaFilmes)
     return (
         <PageContainer>
             Selecione o filme
 
             <ListContainer>
-                
-                <MovieContainer>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster"/>
-                </MovieContainer>
-
-                <MovieContainer>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster"/>
-                </MovieContainer>
-
-                <MovieContainer>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster"/>
-                </MovieContainer>
-
-                <MovieContainer>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster"/>
-                </MovieContainer>
+            {props.listaFilmes.map((a) => <Poster key={a.id} url={a.posterURL} title={a.title} />)}
             </ListContainer>
 
         </PageContainer>
@@ -31,11 +16,11 @@ export default function HomePage(props) {
 function Poster(props){
     return(
         <MovieContainer>
-            
+            <img src={props.url} alt={props.title}/>
         </MovieContainer>
     )
 }
-//{props.listaFilmes.map((a) => <Poster key={a.data.id}  />)}
+//
 const PageContainer = styled.div`
     display: flex;
     flex-direction: column;

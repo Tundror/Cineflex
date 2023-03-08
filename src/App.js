@@ -11,22 +11,24 @@ export default function App() {
     useEffect(() => {
         const promise = axios.get("https://mock-api.driven.com.br/api/v8/cineflex/movies")
         promise.then(resp => {
-            setListaFilmes(resp.data)
-            console.log(resp.data)
+            const x = resp.data
+            setListaFilmes(x)
+            console.log("x",x)
         })
+        promise.catch(() => console.log("deu ruim"))
     }, [])
     return (
         <>
             <NavContainer>CINEFLEX</NavContainer>
 
             <HomePage listaFilmes={listaFilmes} setListaFilmes={setListaFilmes} />
-            <SeatsPage />
-            <SessionsPage />
-            <SuccessPage />
+            
         </>
     )
 }
-
+//<SeatsPage />
+//<SessionsPage />
+//<SuccessPage />
 const NavContainer = styled.div`
     width: 100%;
     height: 70px;
