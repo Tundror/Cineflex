@@ -1,18 +1,28 @@
+import { useEffect, useState } from "react"
 import styled from "styled-components"
+import axios from 'axios';
 import HomePage from "./pages/HomePage/HomePage"
 import SeatsPage from "./pages/SeatsPage/SeatsPage"
 import SessionsPage from "./pages/SessionsPage/SessionsPage"
 import SuccessPage from "./pages/SuccessPage/SuccessPage"
 
 export default function App() {
+    const [listaFilmes, setListaFilmes] = useState([])
+    useEffect(() => {
+        const promise = axios.get("https://mock-api.driven.com.br/api/v8/cineflex/movies")
+        promise.then(resp => {
+            setListaFilmes(resp.data)
+            console.log(resp.data)
+        })
+    }, [])
     return (
         <>
-           <NavContainer>CINEFLEX</NavContainer>
+            <NavContainer>CINEFLEX</NavContainer>
 
-            {/* <HomePage /> */}
-            {/* <SeatsPage /> */}
+            <HomePage listaFilmes={listaFilmes} setListaFilmes={setListaFilmes} />
+            <SeatsPage />
             <SessionsPage />
-            {/* <SuccessPage /> */}
+            <SuccessPage />
         </>
     )
 }
