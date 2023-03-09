@@ -5,30 +5,40 @@ import axios from "axios";
 import { useParams } from 'react-router-dom';
 
 export default function SeatsPage() {
+    const [assentos, setAssentos] = useState([])
+    const { idSessao } = useParams()
+    const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`
+    useEffect(() => {
+        const promise = axios.get(url)
+        promise.then((res) => {
+            setAssentos(res.data)
+        })
 
+        promise.catch(err => console.log(err.response.data))
+    }, [])
+    console.log(assentos)
+    if (assentos.length === 0) {
+        return <PageContainer>Carregando...</PageContainer>
+    }
     return (
         <PageContainer>
             Selecione o(s) assento(s)
 
             <SeatsContainer>
-                <SeatItem>01</SeatItem>
-                <SeatItem>02</SeatItem>
-                <SeatItem>03</SeatItem>
-                <SeatItem>04</SeatItem>
-                <SeatItem>05</SeatItem>
+                {assentos.seats.map((a) => <Assento key={a.name} name={a.name} isAvailable={a.isAvailable} />)}
             </SeatsContainer>
 
             <CaptionContainer>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle cor={"Selecionado"} />
                     Selecionado
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle cor={"Disponível"} />
                     Disponível
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle cor={"Indisponível"} />
                     Indisponível
                 </CaptionItem>
             </CaptionContainer>
@@ -45,15 +55,32 @@ export default function SeatsPage() {
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={assentos.movie.posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
-                    <p>Sexta - 14h00</p>
+                    <p>{assentos.movie.title}</p>
+                    <p>{assentos.day.weekday} - {assentos.name}</p>
                 </div>
             </FooterContainer>
-
         </PageContainer>
+    )
+}
+function Assento(props){
+    const [isSelected, setIsSelected] = useState(false)
+    function selecionarAssento(){
+        if(isSelected === false && props.isAvailable === true)
+        {
+            setIsSelected(true)
+        }
+        else if(isSelected === true && props.isAvailable === true){
+            setIsSelected(false)
+        }
+        else{
+            alert("Esse assento não está disponível")
+        }
+    }
+    return(
+        <SeatItem onClick={selecionarAssento} isAvailable={props.isAvailable} isSelected={isSelected} >{props.name}</SeatItem>
     )
 }
 
@@ -100,8 +127,8 @@ const CaptionContainer = styled.div`
     margin: 20px;
 `
 const CaptionCircle = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
+    border: 1px solid ${props=> props.cor === "Selecionado" ? '#0E7D71' : props.cor === "Disponível" ? "#7B8B99" : "#F7C52B"};         // Essa cor deve mudar
+    background-color: ${props=> props.cor === "Selecionado" ? '#1AAE9E' : props.cor === "Disponível" ? "#C3CFD9" : "#FBE192"};    // Essa cor deve mudar
     height: 25px;
     width: 25px;
     border-radius: 25px;
@@ -117,8 +144,8 @@ const CaptionItem = styled.div`
     font-size: 12px;
 `
 const SeatItem = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
+    border: 1px solid ${props => props.isSelected ? '#0E7D71' : props.isAvailable ? '#808F9D' : '#F7C52B'};         // Essa cor deve mudar
+    background-color: ${props => props.isSelected ? '#1AAE9E' : props.isAvailable ? '#C3CFD9' : '#FBE192'};   // Essa cor deve mudar
     height: 25px;
     width: 25px;
     border-radius: 25px;
