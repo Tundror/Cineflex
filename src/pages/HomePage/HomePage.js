@@ -1,23 +1,25 @@
 import styled from "styled-components"
+import { Link } from "react-router-dom";
 
 export default function HomePage(props) {
-    console.log("props.listaFilmes" ,props.listaFilmes)
     return (
         <PageContainer>
             Selecione o filme
 
             <ListContainer>
-            {props.listaFilmes.map((a) => <Poster key={a.id} url={a.posterURL} title={a.title} />)}
+                {props.listaFilmes.map((a) => <Poster key={a.id} url={a.posterURL} title={a.title} id={a.id} />)}
             </ListContainer>
 
         </PageContainer>
     )
 }
-function Poster(props){
-    return(
-        <MovieContainer>
-            <img src={props.url} alt={props.title}/>
-        </MovieContainer>
+function Poster(props) {
+    return (
+        <Link to={`/sessoes/${props.id}`}>
+            <MovieContainer>
+                <img src={props.url} alt={props.title} />
+            </MovieContainer>
+        </Link>
     )
 }
 //

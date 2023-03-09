@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import axios from 'axios';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage"
 import SeatsPage from "./pages/SeatsPage/SeatsPage"
 import SessionsPage from "./pages/SessionsPage/SessionsPage"
@@ -13,22 +14,22 @@ export default function App() {
         promise.then(resp => {
             const x = resp.data
             setListaFilmes(x)
-            console.log("x",x)
         })
         promise.catch(() => console.log("deu ruim"))
     }, [])
     return (
-        <>
+        <BrowserRouter>
             <NavContainer>CINEFLEX</NavContainer>
-
-            <HomePage listaFilmes={listaFilmes} setListaFilmes={setListaFilmes} />
-            
-        </>
+            <Routes>
+                <Route path="/" element={<HomePage listaFilmes={listaFilmes} setListaFilmes={setListaFilmes} />} />       
+                <Route path="/sessoes/:sessionId" element={<SessionsPage />} />
+                <Route path="/assentos/:seatId" element={<SeatsPage />} />
+                <Route path="/sucesso" element={<SuccessPage />} />
+            </Routes>
+        </BrowserRouter>
     )
 }
-//<SeatsPage />
-//<SessionsPage />
-//<SuccessPage />
+
 const NavContainer = styled.div`
     width: 100%;
     height: 70px;

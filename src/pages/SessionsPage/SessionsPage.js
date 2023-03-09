@@ -1,42 +1,37 @@
 import styled from "styled-components"
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from 'react-router-dom';
 
 export default function SessionsPage() {
-
+    const [sessao, setSessao] = useState([])
+    const { sessionId } = useParams();
+    const url = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${sessionId}/showtimes`
+    useEffect(() => {
+        const promise = axios.get(url)
+        promise.then(res => setSessao(res.data))
+        
+        promise.catch(err => console.log(err.response.data))
+    }, [])
+    if(sessao.length === 0)
+        {
+            return <div>Carregando...</div>         
+        }
     return (
         <PageContainer>
             Selecione o horário
+
             <div>
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
-
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
-
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
+                {sessao.days.map((a) => <Horarios key={a.id} horario={a.showtimes} diaSemana={a.weekday} diaMes={a.date} />)}
             </div>
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={sessao.posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
+                    <p>{sessao.title}</p>
                 </div>
             </FooterContainer>
 
@@ -44,6 +39,17 @@ export default function SessionsPage() {
     )
 }
 
+function Horarios(props){
+    
+    return(
+        <SessionContainer>
+            {props.diaSemana} - {props.diaMes}
+            <ButtonsContainer>
+                {props.horario.map((a) => <Link key={a.id} to={`/assentos/${a.id}`}><button>{a.name}</button></Link>)}
+            </ButtonsContainer>
+        </SessionContainer>
+    )
+}
 const PageContainer = styled.div`
     display: flex;
     flex-direction: column;
