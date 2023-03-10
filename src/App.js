@@ -8,23 +8,40 @@ import SessionsPage from "./pages/SessionsPage/SessionsPage"
 import SuccessPage from "./pages/SuccessPage/SuccessPage"
 
 export default function App() {
-    const [listaFilmes, setListaFilmes] = useState([])
-    useEffect(() => {
-        const promise = axios.get("https://mock-api.driven.com.br/api/v8/cineflex/movies")
-        promise.then(resp => {
-            const x = resp.data
-            setListaFilmes(x)
-        })
-        promise.catch(() => console.log("deu ruim"))
-    }, [])
+    const [tituloFinal, setTituloFinal] = useState("")
+    const [dataFinal, setDataFinal] = useState("")
+    const [horarioFinal, setHorarioFinal] = useState("")
+    const [assentosFinais, setAssentosFinais] = useState([])
+    const [nomeFinal, setNomeFinal] = useState("")
+    const [cpfFinal, setCpfFinal] = useState("")
+    
+    
     return (
         <BrowserRouter>
             <NavContainer>CINEFLEX</NavContainer>
             <Routes>
-                <Route path="/" element={<HomePage listaFilmes={listaFilmes} setListaFilmes={setListaFilmes} />} />       
+                <Route path="/" element={<HomePage />} />
                 <Route path="/sessoes/:idFilme" element={<SessionsPage />} />
-                <Route path="/assentos/:idSessao" element={<SeatsPage />} />
-                <Route path="/sucesso" element={<SuccessPage />} />
+                <Route path="/assentos/:idSessao" element={<SeatsPage tituloFinal={tituloFinal}
+                    setTituloFinal={setTituloFinal}
+                    setDataFinal={setDataFinal}
+                    setHorarioFinal={setHorarioFinal}
+                    assentosFinais={assentosFinais}
+                    setAssentosFinais={setAssentosFinais}
+                    setNomeFinal={setNomeFinal}
+                    setCpfFinal={setCpfFinal} />} />
+                <Route path="/sucesso" element={<SuccessPage tituloFinal={tituloFinal}
+                    dataFinal={dataFinal}
+                    horarioFinal={horarioFinal}
+                    assentosFinais={assentosFinais}
+                    nomeFinal={nomeFinal}
+                    cpfFinal={cpfFinal}
+                    setTituloFinal={setTituloFinal}
+                    setDataFinal={setDataFinal}
+                    setHorarioFinal={setHorarioFinal}
+                    setAssentosFinais={setAssentosFinais}
+                    setNomeFinal={setNomeFinal}
+                    setCpfFinal={setCpfFinal} />}/>
             </Routes>
         </BrowserRouter>
     )

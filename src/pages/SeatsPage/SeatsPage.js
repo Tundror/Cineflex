@@ -3,10 +3,15 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from 'react-router-dom';
+import { useNavigate } from "react-router-dom"
 
-export default function SeatsPage() {
+export default function SeatsPage(props) {
     const [assentos, setAssentos] = useState([])
+    const [nome, setNome] = useState("")
+    const [cpf, setCpf] = useState("")
+    const [arrayIds, setArrayIds] = useState([])
     const { idSessao } = useParams()
+    const navigate = useNavigate()
     const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`
     useEffect(() => {
         const promise = axios.get(url)
@@ -16,16 +21,34 @@ export default function SeatsPage() {
 
         promise.catch(err => console.log(err.response.data))
     }, [])
-    console.log(assentos)
     if (assentos.length === 0) {
         return <PageContainer>Carregando...</PageContainer>
+    }
+    function reservarAssentos(event) {
+        event.preventDefault();
+        const promise = axios.post("https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many", {
+            ids: arrayIds,
+            name: nome,
+            cpf: cpf
+        })
+        promise.then(() => {
+            props.setTituloFinal(assentos.movie.title)
+            props.setDataFinal(assentos.day.date)
+            props.setHorarioFinal(assentos.name)
+            props.setNomeFinal(nome)
+            props.setCpfFinal(cpf)
+            navigate("/sucesso")
+
+        })
+        promise.catch(() => console.log("deu ruim"))
+
     }
     return (
         <PageContainer>
             Selecione o(s) assento(s)
 
             <SeatsContainer>
-                {assentos.seats.map((a) => <Assento key={a.name} name={a.name} isAvailable={a.isAvailable} />)}
+                {assentos.seats.map((a) => <Assento assentosFinais={props.assentosFinais} setAssentosFinais={props.setAssentosFinais} arrayIds={arrayIds} setArrayIds={setArrayIds} key={a.id} name={a.name} isAvailable={a.isAvailable} id={a.id} />)}
             </SeatsContainer>
 
             <CaptionContainer>
@@ -42,17 +65,18 @@ export default function SeatsPage() {
                     Indisponível
                 </CaptionItem>
             </CaptionContainer>
+            <form onSubmit={reservarAssentos}>
+                <FormContainer>
+                    Nome do Comprador:
+                    <input placeholder="Digite seu nome..." type="text" value={nome} onChange={e => setNome(e.target.value)} />
 
-            <FormContainer>
-                Nome do Comprador:
-                <input placeholder="Digite seu nome..." />
+                    CPF do Comprador:
+                    <input placeholder="Digite seu CPF..." type="text" value={cpf} onChange={e => setCpf(e.target.value)} />
 
-                CPF do Comprador:
-                <input placeholder="Digite seu CPF..." />
+                    <button type="submit">Reservar Assento(s)</button>
 
-                <button>Reservar Assento(s)</button>
-            </FormContainer>
-
+                </FormContainer>
+            </form>
             <FooterContainer>
                 <div>
                     <img src={assentos.movie.posterURL} alt="poster" />
@@ -65,21 +89,27 @@ export default function SeatsPage() {
         </PageContainer>
     )
 }
-function Assento(props){
+function Assento(props) {
     const [isSelected, setIsSelected] = useState(false)
-    function selecionarAssento(){
-        if(isSelected === false && props.isAvailable === true)
-        {
+    function selecionarAssento() {
+        const array = props.arrayIds
+        const arrayNomes = props.assentosFinais
+        if (isSelected === false && props.isAvailable === true) {
             setIsSelected(true)
+            array.push(props.id)
+            arrayNomes.push(props.name)
+            props.setArrayIds(array)
         }
-        else if(isSelected === true && props.isAvailable === true){
+        else if (isSelected === true && props.isAvailable === true) {
             setIsSelected(false)
+            props.setArrayIds(array.filter(id => id !== props.id))
+            props.setAssentosFinais(arrayNomes.filter(nome => nome !== props.name))
         }
-        else{
+        else {
             alert("Esse assento não está disponível")
         }
     }
-    return(
+    return (
         <SeatItem onClick={selecionarAssento} isAvailable={props.isAvailable} isSelected={isSelected} >{props.name}</SeatItem>
     )
 }
@@ -127,8 +157,8 @@ const CaptionContainer = styled.div`
     margin: 20px;
 `
 const CaptionCircle = styled.div`
-    border: 1px solid ${props=> props.cor === "Selecionado" ? '#0E7D71' : props.cor === "Disponível" ? "#7B8B99" : "#F7C52B"};         // Essa cor deve mudar
-    background-color: ${props=> props.cor === "Selecionado" ? '#1AAE9E' : props.cor === "Disponível" ? "#C3CFD9" : "#FBE192"};    // Essa cor deve mudar
+    border: 1px solid ${props => props.cor === "Selecionado" ? '#0E7D71' : props.cor === "Disponível" ? "#7B8B99" : "#F7C52B"};         // Essa cor deve mudar
+    background-color: ${props => props.cor === "Selecionado" ? '#1AAE9E' : props.cor === "Disponível" ? "#C3CFD9" : "#FBE192"};    // Essa cor deve mudar
     height: 25px;
     width: 25px;
     border-radius: 25px;
