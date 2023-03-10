@@ -26,7 +26,7 @@ export default function SessionsPage() {
                 {sessao.days.map((a) => <Horarios key={a.id} horario={a.showtimes} diaSemana={a.weekday} diaMes={a.date} />)}
             </div>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
                     <img src={sessao.posterURL} alt="poster" />
                 </div>
@@ -42,10 +42,10 @@ export default function SessionsPage() {
 function Horarios(props){
     
     return(
-        <SessionContainer>
+        <SessionContainer data-test="movie-day">
             {props.diaSemana} - {props.diaMes}
             <ButtonsContainer>
-                {props.horario.map((a) => <Link key={a.id} to={`/assentos/${a.id}`}><button>{a.name}</button></Link>)}
+                {props.horario.map((a) => <Link key={a.id} to={`/assentos/${a.id}`}><button data-test="showtime">{a.name}</button></Link>)}
             </ButtonsContainer>
         </SessionContainer>
     )

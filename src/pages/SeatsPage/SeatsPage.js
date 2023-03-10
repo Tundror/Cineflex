@@ -68,16 +68,16 @@ export default function SeatsPage(props) {
             <form onSubmit={reservarAssentos}>
                 <FormContainer>
                     Nome do Comprador:
-                    <input placeholder="Digite seu nome..." type="text" value={nome} onChange={e => setNome(e.target.value)} />
+                    <input data-test="client-name" placeholder="Digite seu nome..." type="text" value={nome} onChange={e => setNome(e.target.value)} />
 
                     CPF do Comprador:
-                    <input placeholder="Digite seu CPF..." type="text" value={cpf} onChange={e => setCpf(e.target.value)} />
+                    <input data-test="client-cpf" placeholder="Digite seu CPF..." type="text" value={cpf} onChange={e => setCpf(e.target.value)} />
 
-                    <button type="submit">Reservar Assento(s)</button>
+                    <button data-test="book-seat-btn" type="submit">Reservar Assento(s)</button>
 
                 </FormContainer>
             </form>
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
                     <img src={assentos.movie.posterURL} alt="poster" />
                 </div>
@@ -110,7 +110,7 @@ function Assento(props) {
         }
     }
     return (
-        <SeatItem onClick={selecionarAssento} isAvailable={props.isAvailable} isSelected={isSelected} >{props.name}</SeatItem>
+        <SeatItem data-test="seat" onClick={selecionarAssento} isAvailable={props.isAvailable} isSelected={isSelected} >{props.name}</SeatItem>
     )
 }
 
