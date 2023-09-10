@@ -56,6 +56,7 @@ const PageContainer = styled.div`
     font-family: 'Roboto';
     font-size: 24px;
     text-align: center;
+    align-items: center;
     color: #293845;
     margin-top: 30px;
     padding-bottom: 120px;
@@ -67,7 +68,8 @@ const PageContainer = styled.div`
 const SessionContainer = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
     font-family: 'Roboto';
     font-size: 20px;
     color: #293845;
