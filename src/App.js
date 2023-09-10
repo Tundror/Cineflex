@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import styled from "styled-components"
-import axios from 'axios';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage"
 import SeatsPage from "./pages/SeatsPage/SeatsPage"
