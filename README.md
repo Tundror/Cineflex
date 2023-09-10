@@ -6,7 +6,7 @@ This is a mobile-focused web page that emulates buying tickets in a cinema. The 
 
 ### Deploy
 
-- You can use the deploy link to access the application: [Deploy Link](projeto10-cineflex-tundror.vercel.app)
+- You can use the deploy link to access the application: [Deploy Link](https://projeto10-cineflex-tundror.vercel.app/)
 
 ### Running locally
 
