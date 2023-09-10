@@ -11,7 +11,7 @@ export default function HomePage(props) {
             const x = resp.data
             setListaFilmes(x)
         })
-        promise.catch(() => console.log("deu ruim"))
+        promise.catch(err => console.log(err.response.data))
     }, [])
     return (
         <PageContainer>

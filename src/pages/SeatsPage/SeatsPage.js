@@ -40,7 +40,7 @@ export default function SeatsPage(props) {
             navigate("/sucesso")
 
         })
-        promise.catch(() => console.log("deu ruim"))
+        promise.catch(err => console.log(err.response.data))
 
     }
     return (
