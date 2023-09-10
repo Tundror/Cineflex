@@ -2,6 +2,13 @@
 
 This is a mobile-focused web page that emulates buying tickets in a cinema. The user can select a movie, select a session and a seat, and the app will generate all the final informations at the end.
 
+## About
+
+- Select your favorite movie
+- Choose the best session for you
+- Choose your seat
+- Checkout!
+
 ## Installing / Getting started
 
 ### Deploy
